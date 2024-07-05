@@ -1,19 +1,15 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once '../../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/config');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../../config/');
 $dotenv->load();
 
-$stripeSecretKey = $_ENV['API__SECRET_KEY'];
-
-$stripe = new StripeClient($stripeSecretKey);
+$stripe = new \Stripe\StripeClient($_ENV["API__SECRET_KEY"]);
 
 function calculateOrderAmount(int $amount): int {
-    // Replace this constant with a calculation of the order's amount
-    // Calculate the order total on the server to prevent
-    // people from directly manipulating the amount on the client
-    return 1400;
+    $safeAmount = htmlspecialchars($amount);
+    return $safeAmount * 100;
 }
 
 header('Content-Type: application/json');
@@ -21,9 +17,15 @@ header('Content-Type: application/json');
 try {
     // retrieve JSON from POST body
     $jsonStr = file_get_contents('php://input');
-    $jsonObj = json_decode($jsonStr);
+    $jsonObj = json_decode($jsonStr, true);
 
+    $amount = calculateOrderAmount($jsonObj["amount"]);
+    
     // TODO : Create a PaymentIntent with amount and currency in '$paymentIntent'
+ $paymentIntent = $stripe->paymentIntents->create([
+        'amount' => $amount,
+        'currency' => 'eur',
+    ]);
 
     $output = [
         'clientSecret' => $paymentIntent->client_secret,

@@ -5,9 +5,15 @@
 
 const stripe = Stripe('pk_test_51PZ7kFKXQPS6vUrLEvLE5m5s4ifRG4QTWTYqaM3bhGrxAh54A0pDIY9ioHXerrgT46w3WtZjAKtMXVOD2yya1T3b00UMMjdYE5');
 
+let amountInput = document.getElementById('montant-personnalise'); 
 let amount;
-initialize();
 
+amountInput.addEventListener('change', function(event) {
+  amount = event.target.value;
+  if (amount >= 1) {
+    initialize();
+  }
+});
 
 let elements;
 
@@ -46,7 +52,7 @@ async function handleSubmit(e) {
   const { error } = await stripe.confirmPayment({
     elements,
     confirmParams: {
-      return_url: "https://janelhocde.sites.3wa.io/php/bre02-php-donate-for-ducks/public/app/views/index.php",
+      return_url: "https://janelhocde.sites.3wa.io/bre02-php-donate-for-ducks/public/index.php",
     },
   });
 
