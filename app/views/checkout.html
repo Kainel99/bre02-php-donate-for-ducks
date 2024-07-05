@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fondation des Canards de debug</title>
+    <meta name="description" content="Page de donnation pour les canards de debug" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../public/css/checkout.css" />
+    <script src="../public/js/checkout.js" defer></script>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+  <body>
+    <!-- Display a payment form -->
+    <form id="payment-form">
+      <h1>Appel aux dons pour les canards de debug</h1>
+      <fieldset>
+        <legend><label for="montant-personnalise">Choisissez votre montant :</label></legend>
+        <input type="number" id="montant-personnalise" name="montant-personnalise" min="1">€
+      </fieldset>
+      <div id="payment-element" >
+        <!--Stripe.js injects the Payment Element-->
+      </div>
+      <button id="submit" disabled="disabled">
+        <div class="spinner hidden" id="spinner"></div>
+        <span id="button-text">Faire un don</span>
+      </button>
+      <div id="payment-message" class="hidden"></div>
+    </form>
+  </body>
+</html>
